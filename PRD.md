@@ -371,7 +371,21 @@
 - 검색 결과의 최신성 표시 방식
 - API 실패 시 캐시 데이터를 사용할지 여부
 - MVP의 구체적인 응답시간과 정확도 목표
-- 배포 환경과 도메인
+- 배포 도메인
+
+## 14.1 확정된 기술 스택
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Next.js Route Handlers
+- Vitest 및 React Testing Library
+- Playwright
+- ESLint 및 Prettier
+- Vercel 우선 검토
+- npm
+
+상세한 기술 구조와 외부 API 어댑터 원칙은 [TECHNICAL-DESIGN.md](./TECHNICAL-DESIGN.md)에 기록한다.
 
 ## 15. 완료 조건
 

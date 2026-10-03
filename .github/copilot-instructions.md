@@ -3,13 +3,13 @@
 ## Project context
 
 - `PRD.md` is the current source of truth for product scope, user flows, requirements, and unresolved technical decisions.
-- The repository is currently at the documentation/planning stage. No application source, package manifest, build configuration, test configuration, or lint configuration is defined yet.
-- `README.md` does not currently provide additional setup or development commands.
+- The repository is beginning Mock-data MVP implementation with Next.js, TypeScript, and Tailwind CSS.
+- `TECHNICAL-DESIGN.md` records the implementation architecture and is subordinate to `PRD.md` for product scope.
 
 ## Build, test, and lint
 
-- No build, test, or lint commands are currently defined in this repository.
-- Do not invent a framework, package manager, or command set. When implementation begins, first inspect the added project configuration and update this file with the actual commands.
+- Use npm scripts defined in `package.json` for development, linting, type checking, testing, and builds.
+- Keep `README.md` and this file synchronized with the actual project scripts whenever tooling changes.
 - Once a test runner exists, document both the full suite and the repository's supported single-test invocation here.
 
 ## Architecture
@@ -36,6 +36,15 @@ The planned product is a responsive web application for searching books across B
 - Keep loan status distinguishable with text as well as color. Preserve keyboard access, accessible names, and assistive-technology announcements for loading and error states.
 - Maintain responsive behavior: list and map can stack on small screens and sit side by side on larger screens.
 - Keep the MVP boundary from `PRD.md`: prioritize title search, library-level holdings/loan status, map integration, origin selection, walking/transit estimates, and failure states before authentication, favorites, history, reservations, or expanded search fields.
+
+## Delivery workflow
+
+- Convert each PRD requirement into a backlog item with a priority, dependencies, and observable acceptance criteria.
+- Prioritize work as P0 (required for the end-to-end MVP flow), P1 (MVP quality improvements), or P2 (post-MVP expansion).
+- Prefer vertical slices that leave a usable increment: search, normalized results, map/origin, route information, and failure handling should be integrated incrementally rather than built as isolated layers.
+- Use a short, regular iteration cycle. At the end of each cycle, run the available checks, verify the end-to-end user flow, and deploy a tested increment when the deployment environment exists.
+- Do not mark a backlog item complete based only on implementation. Confirm its acceptance criteria, relevant error paths, responsive behavior, and regression impact.
+- When project tooling is added, update this file with the actual development, test, lint, build, and deployment commands instead of retaining placeholders.
 
 ## Product decisions still requiring verification
 
