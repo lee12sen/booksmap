@@ -48,12 +48,14 @@ const mockResults: LibraryBookResult[] = [
 export async function searchMockBooks(
   query: string,
 ): Promise<LibraryBookResult[]> {
+  // 앞뒤 공백과 대소문자 차이를 제거해 사용자의 입력을 안정적으로 비교한다.
   const normalizedQuery = query.trim().toLowerCase();
 
   if (!normalizedQuery) {
     return [];
   }
 
+  // 인증키 발급 전에는 도서명 포함 여부로 개발용 결과를 필터링한다.
   return mockResults.filter((result) =>
     result.bookTitle.toLowerCase().includes(normalizedQuery),
   );

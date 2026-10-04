@@ -30,8 +30,10 @@ export default function Home() {
     setIsLoading(true);
 
     try {
+      // 검색할 때마다 이전 선택 상태를 초기화하고 새 결과만 반영한다.
       setResults(await searchBooks(query));
     } finally {
+      // 검색 성공 여부와 관계없이 로딩 상태를 반드시 종료한다.
       setIsLoading(false);
     }
   }
