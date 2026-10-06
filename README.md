@@ -4,7 +4,7 @@
 
 BooksMap은 부산 지역 공공도서관을 대상으로 원하는 도서를 검색하고, 해당 도서를 보유한 도서관의 대출 가능 여부와 위치를 비교할 수 있도록 돕는 반응형 웹 서비스입니다.
 
-현재는 인증키 발급 전 단계이므로 개발용 Mock 데이터로 핵심 검색 흐름을 구현하고 있습니다. 제품 요구사항은 [PRD.md](./PRD.md), 기술 구조는 [TECHNICAL-DESIGN.md](./TECHNICAL-DESIGN.md)를 참고해 주세요.
+현재는 인증키 발급 전 단계이므로 개발용 Mock 데이터로 핵심 검색 흐름을 구현하고 있습니다. 제품 요구사항은 [PRD.md](./docs/PRD.md), 기술 구조는 [TECHNICAL-DESIGN.md](./docs/TECHNICAL-DESIGN.md)를 참고해 주세요.
 
 ## 현재 기술 스택
 
@@ -69,8 +69,8 @@ npm run build
 
 ## 문서
 
-- [제품 요구사항 정의서](./PRD.md)
-- [기술 설계서](./TECHNICAL-DESIGN.md)
+- [제품 요구사항 정의서](./docs/PRD.md)
+- [기술 설계서](./docs/TECHNICAL-DESIGN.md)
 - [MIT License](./LICENSE)
 
 ## 개인정보 및 보안 원칙
