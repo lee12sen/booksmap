@@ -2,9 +2,9 @@
 
 ## Project context
 
-- `PRD.md` is the current source of truth for product scope, user flows, requirements, and unresolved technical decisions.
+- `docs/PRD.md` is the current source of truth for product scope, user flows, requirements, and unresolved technical decisions.
 - The repository is beginning Mock-data MVP implementation with Next.js, TypeScript, and Tailwind CSS.
-- `TECHNICAL-DESIGN.md` records the implementation architecture and is subordinate to `PRD.md` for product scope.
+- `docs/TECHNICAL-DESIGN.md` records the implementation architecture and is subordinate to `docs/PRD.md` for product scope.
 
 ## Build, test, and lint
 
@@ -35,7 +35,7 @@ The planned product is a responsive web application for searching books across B
 - User-facing errors must include an understandable recovery path (retry, revise the search, choose an address, or continue without route data); logging only to the browser console is insufficient.
 - Keep loan status distinguishable with text as well as color. Preserve keyboard access, accessible names, and assistive-technology announcements for loading and error states.
 - Maintain responsive behavior: list and map can stack on small screens and sit side by side on larger screens.
-- Keep the MVP boundary from `PRD.md`: prioritize title search, library-level holdings/loan status, map integration, origin selection, walking/transit estimates, and failure states before authentication, favorites, history, reservations, or expanded search fields.
+- Keep the MVP boundary from `docs/PRD.md`: prioritize title search, library-level holdings/loan status, map integration, origin selection, walking/transit estimates, and failure states before authentication, favorites, history, reservations, or expanded search fields.
 
 ## Delivery workflow
 
