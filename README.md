@@ -40,6 +40,19 @@ npm run typecheck
 npm run build
 ```
 
+## DORA 지표 워크플로우
+
+DORA 4대 지표는 GitHub Actions와 GitHub Deployment·Issue 데이터를 이용해 측정합니다.
+
+- **Lead Time**: `main` 브랜치에 PR이 병합될 때 PR에 포함된 가장 이른 커밋부터 병합까지의 시간을 계산합니다.
+- **Deployment Frequency**: 매주 또는 수동 실행으로 최근 7일간 성공한 `Production` Deployment 수를 집계합니다.
+- **Change Failure Rate**: 최근 7일간 성공한 `Production` Deployment 중 Production 장애와 연결된 배포의 비율을 계산합니다.
+- **MTTR**: 수동 실행 시 종료된 Production 장애 이슈의 `Started at`과 `Recovered at`을 이용해 평균 복구 시간을 계산합니다.
+
+Production 상태 확인은 `health-check.yml`이 5분마다 실행되어 수행합니다. `PRODUCTION_URL`을 GitHub Actions Repository Variable로 설정하면 서비스 응답을 확인하고, 장애 발생 시 `Incident: Production health check failed` 이슈를 생성합니다. 서비스가 복구되면 해당 이슈에 복구 시각과 복구 시간을 기록한 뒤 닫습니다.
+
+배포 빈도 측정은 `deployment-tracker.yml`이 Production Deployment 이벤트를 기록하고, `deployment-frequency.yml`이 성공한 배포를 집계하는 방식으로 동작합니다. 각 워크플로우는 GitHub Actions의 **Run workflow**를 통해 수동으로 실행할 수 있으며, 측정 결과는 Actions Summary에서 확인합니다.
+
 ## 주요 MVP 기능
 
 - 부산 공공도서관 통합 도서명 검색
