@@ -1,0 +1,20 @@
+name: Track Deployments
+
+on:
+  deployment:
+
+permissions:
+  contents: read
+
+jobs:
+  track-deployment:
+    if: github.event.deployment.environment == 'Production' || github.event.deployment.environment == 'production'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Production deployment
+        run: |
+          echo "Deployment at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Environment: ${{ github.event.deployment.environment }}"
+          echo "Deployment ID: ${{ github.event.deployment.id }}"
+          echo "Commit SHA: ${{ github.event.deployment.sha }}"
+          echo "Deployment URL: ${{ github.event.deployment.url }}"
