@@ -1,0 +1,71 @@
+name: Calculate MTTR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: read
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calculate MTTR from incident issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const incidents = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'closed',
+                per_page: 100,
+              }
+            );
+            const recoveryTimes = incidents
+              .filter((issue) => issue.title === 'Incident: Production health check failed')
+              .map((issue) => {
+                const startedAt = issue.body?.match(/Started at: (.+)/)?.[1];
+                return { issue, startedAt };
+              });
+
+            const times = [];
+            for (const incident of recoveryTimes) {
+              if (!incident.startedAt) continue;
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: incident.issue.number,
+                per_page: 100,
+              });
+              const recoveryComment = comments.find((comment) =>
+                comment.body.includes('Recovered at:')
+              );
+              const recoveredAt = recoveryComment?.body.match(/Recovered at: (.+)/)?.[1];
+              if (!recoveredAt) continue;
+              const minutes = Math.round(
+                (Date.parse(recoveredAt) - Date.parse(incident.startedAt)) / 60000
+              );
+              if (minutes >= 0) times.push(minutes);
+            }
+
+            if (times.length === 0) {
+              core.setFailed('복구 시간이 기록된 장애 이슈가 없습니다.');
+              return;
+            }
+
+            const total = times.reduce((sum, minutes) => sum + minutes, 0);
+            const average = Math.round(total / times.length);
+            const hours = Math.floor(average / 60);
+            const minutes = average % 60;
+
+            await core.summary
+              .addHeading('MTTR')
+              .addTable([
+                [{ data: '항목', header: true }, { data: '결과', header: true }],
+                ['장애 건수', `${times.length}건`],
+                ['MTTR', `${hours}시간 ${minutes}분`],
+              ])
+              .write();
+            core.info(`MTTR: ${hours}시간 ${minutes}분`);

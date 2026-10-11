@@ -1,0 +1,92 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check service and update incident issue
+        uses: actions/github-script@v7
+        env:
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        with:
+          script: |
+            if (!process.env.PRODUCTION_URL) {
+              core.setFailed('PRODUCTION_URL GitHub variable is not configured.');
+              return;
+            }
+
+            const response = await fetch(process.env.PRODUCTION_URL, {
+              signal: AbortSignal.timeout(20000),
+            }).catch(() => null);
+            const isHealthy = response?.ok === true;
+            const title = 'Incident: Production health check failed';
+            const incidents = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+              }
+            );
+            const openIncident = incidents.find((issue) => issue.title === title);
+            const now = new Date().toISOString();
+
+            if (!isHealthy && !openIncident) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: [
+                  '## Production incident',
+                  '',
+                  `Started at: ${now}`,
+                  `URL: ${process.env.PRODUCTION_URL}`,
+                ].join('\n'),
+              });
+              core.setFailed('Production health check failed. Incident issue created.');
+              return;
+            }
+
+            if (!isHealthy) {
+              core.setFailed('Production health check failed. Existing incident issue is open.');
+              return;
+            }
+
+            if (openIncident) {
+              const recoveredAt = now;
+              const startedAt = openIncident.body.match(/Started at: (.+)/)?.[1];
+              const recoveryMinutes = startedAt
+                ? Math.round((Date.parse(recoveredAt) - Date.parse(startedAt)) / 60000)
+                : null;
+              const comment = [
+                `Recovered at: ${recoveredAt}`,
+                recoveryMinutes === null
+                  ? 'Recovery time: unavailable'
+                  : `Recovery time: ${recoveryMinutes} minutes`,
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: openIncident.number,
+                body: comment,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: openIncident.number,
+                state: 'closed',
+              });
+            }
+
+            core.info('Production service is healthy.');
