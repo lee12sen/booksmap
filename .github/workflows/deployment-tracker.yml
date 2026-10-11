@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Log Production deployment
         run: |
-          echo "Deployment at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Deployment at: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M:%S KST')"
           echo "Environment: ${{ github.event.deployment.environment }}"
           echo "Deployment ID: ${{ github.event.deployment.id }}"
           echo "Commit SHA: ${{ github.event.deployment.sha }}"
