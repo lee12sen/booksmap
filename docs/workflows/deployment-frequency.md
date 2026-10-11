@@ -35,3 +35,5 @@ Production 배포 횟수: 5회
 GitHub Actions가 Production 배포 이벤트가 발생할 때마다 실행되어 배포 시간과 환경을 기록한다.
 
 Preview 배포는 자동으로 제외한다. Actions에서 `Track Deployments` 실행 횟수를 확인하면 측정 기간의 Production 배포 횟수를 셀 수 있다.
+
+`deployment-tracker.yml`은 개별 Production 배포의 시간, 환경, 커밋 SHA, 배포 URL을 기록한다.
