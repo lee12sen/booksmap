@@ -30,6 +30,22 @@ npm run dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 엽니다.
 
+## GitHub 메트릭과 Prometheus
+
+GitHub 활동 지표를 수집하려면 Next.js 서버를 실행하기 전에 다음 환경변수를 설정합니다.
+
+```text
+GITHUB_TOKEN=GitHub personal access token
+GITHUB_REPOSITORY=lee12sen/booksmap
+```
+
+토큰은 저장소에 커밋하지 마세요. 서버가 실행되면 Prometheus 메트릭은
+[http://localhost:3000/api/metrics](http://localhost:3000/api/metrics)에서 확인할 수 있습니다.
+Docker Compose의 Prometheus는 이 주소를 주기적으로 수집합니다.
+
+`.env.example`을 복사해 `.env.local`을 만들고 값을 입력할 수 있습니다.
+GitHub 토큰에는 저장소의 커밋, 이슈, Pull Request를 읽을 수 있는 권한만 부여하세요.
+
 현재 검색 화면은 `어린 왕자`를 대상으로 한 개발용 예시 데이터를 제공합니다. 실제 API 인증키 발급 후 공공데이터 어댑터로 교체합니다.
 
 ## 검증 명령
