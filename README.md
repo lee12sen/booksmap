@@ -1,4 +1,6 @@
 # BooksMap
+[![Build](https://github.com/lee12sen/booksmap/actions/workflows/ci.yml/badge.svg)](https://github.com/lee12sen/booksmap/actions/workflows/ci.yml)
+---------------
 
 > 부산 공공도서관의 도서 소장·대출 상태와 방문 정보를 한 곳에서 확인하는 통합 검색 서비스
 
