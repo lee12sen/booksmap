@@ -8,4 +8,4 @@
 - [마일스톤](https://github.com/lee12sen/booksmap/milestones)
 
 ## Sprint 실행
-- [스프린트 문서](../docs\sprint-plan.md)
+- [스프린트 문서](https://github.com/lee12sen/booksmap/blob/main/docs/sprint-plan.md)
