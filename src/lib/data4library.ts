@@ -6,6 +6,8 @@ interface Data4LibraryApiResponse {
     errCode?: string;
     message?: string;
     error?: string;
+    numFound?: number | string;
+    pageSize?: number | string;
     libs?: Array<{
       lib?: Data4LibraryLibrary;
     }>;
@@ -54,11 +56,14 @@ function toLibrarySummary(library: Data4LibraryLibrary): LibrarySummary | null {
   };
 }
 
-export async function fetchBusanLibraries(): Promise<LibrarySummary[]> {
+async function fetchLibraryPage(
+  authKey: string,
+  pageNo: number,
+): Promise<NonNullable<Data4LibraryApiResponse["response"]>> {
   const params = new URLSearchParams({
-    authKey: getAuthKey(),
+    authKey,
     region: BUSAN_REGION_CODE,
-    pageNo: "1",
+    pageNo: String(pageNo),
     pageSize: "100",
     format: "json",
   });
@@ -88,11 +93,36 @@ export async function fetchBusanLibraries(): Promise<LibrarySummary[]> {
     );
   }
 
-  const results = (apiResponse.libs ?? [])
-    .map((item) => item.lib)
-    .filter((library): library is Data4LibraryLibrary => library !== undefined)
-    .map(toLibrarySummary)
-    .filter((library): library is LibrarySummary => library !== null);
+  return apiResponse;
+}
 
-  return results;
+export async function fetchBusanLibraries(): Promise<LibrarySummary[]> {
+  const authKey = getAuthKey();
+  const firstPage = await fetchLibraryPage(authKey, 1);
+  const pageSize = Number(firstPage.pageSize) || 100;
+  const totalLibraries = Number(firstPage.numFound);
+  const totalPages = Number.isFinite(totalLibraries)
+    ? Math.ceil(totalLibraries / pageSize)
+    : 1;
+  const pages = [firstPage];
+
+  for (let pageNo = 2; pageNo <= totalPages; pageNo += 1) {
+    pages.push(await fetchLibraryPage(authKey, pageNo));
+  }
+
+  const libraries = pages.flatMap((page) =>
+    (page.libs ?? [])
+      .map((item) => item.lib)
+      .filter(
+        (library): library is Data4LibraryLibrary => library !== undefined,
+      ),
+  );
+  const uniqueLibraries = new Map(
+    libraries
+      .map(toLibrarySummary)
+      .filter((library): library is LibrarySummary => library !== null)
+      .map((library) => [library.libraryId, library]),
+  );
+
+  return [...uniqueLibraries.values()];
 }
