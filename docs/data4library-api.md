@@ -29,4 +29,24 @@ http://localhost:3000/api/libraries
 - 응답에 누락된 도서관이 없는지 확인
 - 인증키 오류 또는 호출 제한 응답 확인
 
-도서명 검색과 소장·대출 상태 API는 실제 응답 구조를 확인한 뒤 다음 단계에서 연결합니다.
+## 도서 검색 및 대출 상태 확인
+
+도서명으로 검색합니다.
+
+```text
+http://localhost:3000/api/books?keyword=어린%20왕자
+```
+
+검색 결과의 `isbn13`을 사용해 부산 지역 소장 도서관과 대출 상태를 확인합니다.
+
+```text
+http://localhost:3000/api/books?isbn13=9788949110479
+```
+
+- `srchBooks`: 도서명 검색
+- `libSrchByBook`: ISBN으로 소장 도서관 조회
+- `bookExist`: 도서관별 소장 여부와 대출 가능 여부 확인
+- `loanAvailable=Y`: 대출 가능
+- `loanAvailable=N`: 대출 중 또는 대출 불가
+
+대출 상태를 알 수 없는 값은 내부 모델에서 `unknown`으로 유지합니다. 일부 도서관 조회가 실패해도 성공한 결과는 반환합니다.
