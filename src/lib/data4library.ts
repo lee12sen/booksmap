@@ -1,15 +1,14 @@
 const DATA4LIBRARY_BASE_URL = "https://www.data4library.kr/api";
-const BUSAN_REGION_CODE = "26";
+const BUSAN_REGION_CODE = "21";
 
 interface Data4LibraryApiResponse {
   response?: {
-    libs?: {
-      lib?: Data4LibraryLibrary[];
-    };
-  };
-  error?: {
-    code?: string;
+    errCode?: string;
     message?: string;
+    error?: string;
+    libs?: Array<{
+      lib?: Data4LibraryLibrary;
+    }>;
   };
 }
 
@@ -65,9 +64,6 @@ export async function fetchBusanLibraries(): Promise<LibrarySummary[]> {
   });
 
   const response = await fetch(`${DATA4LIBRARY_BASE_URL}/libSrch?${params}`, {
-    headers: {
-      Accept: "application/json",
-    },
     next: { revalidate: 3600 },
   });
 
@@ -78,16 +74,25 @@ export async function fetchBusanLibraries(): Promise<LibrarySummary[]> {
   }
 
   const payload = (await response.json()) as Data4LibraryApiResponse;
-  const libraries = payload.response?.libs?.lib ?? [];
-  const results = libraries
-    .map(toLibrarySummary)
-    .filter((library): library is LibrarySummary => library !== null);
+  const apiResponse = payload.response;
 
-  if (results.length === 0 && payload.error) {
+  if (!apiResponse) {
+    throw new Error("도서관정보나루 API 응답 형식을 확인할 수 없습니다.");
+  }
+
+  if (apiResponse.errCode && apiResponse.errCode !== "0") {
     throw new Error(
-      payload.error.message ?? "도서관정보나루 API가 오류를 반환했습니다.",
+      apiResponse.error ??
+        apiResponse.message ??
+        "도서관정보나루 API가 오류를 반환했습니다.",
     );
   }
+
+  const results = (apiResponse.libs ?? [])
+    .map((item) => item.lib)
+    .filter((library): library is Data4LibraryLibrary => library !== undefined)
+    .map(toLibrarySummary)
+    .filter((library): library is LibrarySummary => library !== null);
 
   return results;
 }
