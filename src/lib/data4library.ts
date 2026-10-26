@@ -1,3 +1,5 @@
+import type { LibrarySummary } from "@/domain/library";
+
 const DATA4LIBRARY_BASE_URL = "https://www.data4library.kr/api";
 const BUSAN_REGION_CODE = "21";
 
@@ -19,14 +21,6 @@ interface Data4LibraryLibrary {
   libName?: string;
   address?: string;
   tel?: string;
-  homepage?: string;
-}
-
-export interface LibrarySummary {
-  libraryId: string;
-  libraryName: string;
-  address: string;
-  telephone?: string;
   homepage?: string;
 }
 
