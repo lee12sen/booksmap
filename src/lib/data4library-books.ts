@@ -1,4 +1,8 @@
-import type { LibraryBookResult, LoanStatus } from "@/domain/library";
+import type {
+  BookSearchResult,
+  LibraryBookResult,
+  LoanStatus,
+} from "@/domain/library";
 
 const DATA4LIBRARY_BASE_URL = "https://www.data4library.kr/api";
 const BUSAN_REGION_CODE = "21";
@@ -52,16 +56,6 @@ interface Data4LibraryLibrary {
   homepage?: string;
   latitude?: string;
   longitude?: string;
-}
-
-export interface BookSearchItem {
-  title: string;
-  authors: string;
-  publisher: string;
-  publicationYear: string;
-  isbn13: string;
-  imageUrl?: string;
-  detailUrl?: string;
 }
 
 export interface BookAvailabilityResult {
@@ -118,7 +112,7 @@ async function requestJson<T>(endpoint: string, params: URLSearchParams) {
 
 export async function searchData4LibraryBooks(
   keyword: string,
-): Promise<BookSearchItem[]> {
+): Promise<BookSearchResult[]> {
   const normalizedKeyword = keyword.trim();
 
   if (!normalizedKeyword) {

@@ -20,7 +20,7 @@ DATA4LIBRARY_AUTH_KEY=여기에_인증키_입력
 http://localhost:3000/api/libraries
 ```
 
-정상 응답에는 도서관 코드, 이름, 주소가 포함됩니다.
+정상 응답에는 도서관 코드, 이름, 주소가 포함됩니다. 외부 API 필드명은 BooksMap의 `LibrarySummary` 모델로 변환됩니다.
 
 ## 확인할 내용
 
@@ -37,7 +37,7 @@ http://localhost:3000/api/libraries
 http://localhost:3000/api/books?keyword=어린%20왕자
 ```
 
-검색 결과의 `isbn13`을 사용해 부산 지역 소장 도서관과 대출 상태를 확인합니다.
+검색 결과의 `isbn13`을 사용해 부산 지역 소장 도서관과 대출 상태를 확인합니다. 도서 검색 응답은 `BookSearchResult`, 소장·대출 응답은 `LibraryBookResult` 모델을 사용합니다.
 
 ```text
 http://localhost:3000/api/books?isbn13=9788949110479
