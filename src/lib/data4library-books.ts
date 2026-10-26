@@ -100,6 +100,10 @@ function createParams(authKey: string, values: Record<string, string>) {
   });
 }
 
+function normalizeSearchText(value: string): string {
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase();
+}
+
 async function requestJson<T>(endpoint: string, params: URLSearchParams) {
   const response = await fetch(`${DATA4LIBRARY_BASE_URL}/${endpoint}?${params}`);
 
@@ -125,6 +129,7 @@ export async function searchData4LibraryBooks(
     "srchBooks",
     createParams(getAuthKey(), {
       keyword: normalizedKeyword,
+      exactMatch: "true",
       pageNo: "1",
       pageSize: "10",
     }),
@@ -140,6 +145,8 @@ export async function searchData4LibraryBooks(
     throw new Error(error);
   }
 
+  const searchText = normalizeSearchText(normalizedKeyword);
+
   return (apiResponse.docs ?? [])
     .map((item) => item.doc)
     .filter((book): book is Data4LibraryBook => Boolean(book?.isbn13))
@@ -151,7 +158,8 @@ export async function searchData4LibraryBooks(
       isbn13: book.isbn13!,
       imageUrl: book.bookImageURL,
       detailUrl: book.bookDtlUrl,
-    }));
+    }))
+    .filter((book) => normalizeSearchText(book.title).includes(searchText));
 }
 
 function toLoanStatus(value: string | undefined): LoanStatus {
