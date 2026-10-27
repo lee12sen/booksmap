@@ -32,6 +32,12 @@ npm run dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 엽니다.
 
+관련 문서는 다음 목록에서 바로 확인할 수 있습니다.
+
+- **처음 설정하기**: [Getting Started](./docs/getting-started.md)
+- **개발 규칙과 구조 확인하기**: [Development Guide](./docs/development-guide.md)
+- **문제 해결하기**: [Troubleshooting](./docs/troubleshooting.md)
+
 ## GitHub 메트릭과 Prometheus
 
 GitHub 활동 지표를 수집하려면 Next.js 서버를 실행하기 전에 다음 환경변수를 설정합니다.
@@ -99,6 +105,14 @@ Production 상태 확인은 `health-check.yml`이 5분마다 실행되어 수행
 | 테스트 및 배포 | 예정 |
 
 ## 문서
+
+### 개발자 문서
+
+- [Getting Started](./docs/getting-started.md)
+- [Development Guide](./docs/development-guide.md)
+- [Troubleshooting](./docs/troubleshooting.md)
+
+### 프로젝트 문서
 
 - [제품 요구사항 정의서](./docs/PRD.md)
 - [기술 설계서](./docs/TECHNICAL-DESIGN.md)
