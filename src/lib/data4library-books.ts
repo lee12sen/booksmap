@@ -123,7 +123,7 @@ export async function searchData4LibraryBooks(
     "srchBooks",
     createParams(getAuthKey(), {
       keyword: normalizedKeyword,
-      exactMatch: "true",
+      exactMatch: "false",
       pageNo: "1",
       pageSize: "10",
     }),
