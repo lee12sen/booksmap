@@ -6,6 +6,7 @@ import type {
 
 const DATA4LIBRARY_BASE_URL = "https://www.data4library.kr/api";
 const BUSAN_REGION_CODE = "21";
+const MAX_LIBRARY_RESULTS = 5;
 
 interface BookSearchResponse {
   response?: {
@@ -123,7 +124,7 @@ export async function searchData4LibraryBooks(
     "srchBooks",
     createParams(getAuthKey(), {
       keyword: normalizedKeyword,
-      exactMatch: "true",
+      exactMatch: "false",
       pageNo: "1",
       pageSize: "10",
     }),
@@ -204,8 +205,9 @@ export async function findBookAvailability(
       Boolean(library?.libCode && library.libName && library.address),
     );
 
+  const limitedLibraries = libraries.slice(0, MAX_LIBRARY_RESULTS);
   const results = await Promise.allSettled(
-    libraries.map(async (library): Promise<LibraryBookResult> => {
+    limitedLibraries.map(async (library): Promise<LibraryBookResult> => {
       const availabilityPayload = await requestJson<BookAvailabilityResponse>(
         "bookExist",
         createParams(authKey, {
