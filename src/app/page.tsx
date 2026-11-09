@@ -10,6 +10,7 @@ import {
   searchBookAvailability,
   searchBooks,
 } from "@/services/book-search";
+import KakaoMap from "@/components/kakao-map";
 
 const statusLabels: Record<LoanStatus, string> = {
   available: "대출 가능",
@@ -238,46 +239,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            aria-label="도서관 위치 지도 예시 영역"
-            className="relative min-h-[420px] overflow-hidden rounded-3xl bg-[#dcebf0] shadow-sm ring-1 ring-slate-200"
-          >
-            <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff)] [background-position:0_0,0_0,20px_35px,20px_35px] [background-size:40px_70px]"></div>
-            <div className="absolute left-6 top-6 rounded-2xl bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
-              <p className="text-sm font-bold">지도 영역</p>
-              <p className="mt-1 text-xs text-slate-500">카카오맵 연동 예정</p>
-            </div>
-            {results.map((result, index) => (
-              <button
-                aria-label={`${result.libraryName} 지도에서 선택`}
-                className={`absolute flex h-10 w-10 items-center justify-center rounded-full border-4 border-white font-bold text-white shadow-lg transition ${
-                  selectedLibraryId === result.libraryId
-                    ? "z-10 scale-125 bg-blue-700"
-                    : "bg-slate-700 hover:scale-110"
-                }`}
-                key={result.libraryId}
-                onClick={() => setSelectedLibraryId(result.libraryId)}
-                style={{
-                  left: `${24 + index * 25}%`,
-                  top: `${42 + (index % 2) * 18}%`,
-                }}
-                type="button"
-              >
-                {index + 1}
-              </button>
-            ))}
-            {results.length === 0 && (
-              <p className="absolute inset-x-8 top-1/2 text-center text-sm text-slate-600">
-                검색 결과가 있으면 도서관 위치가 여기에 표시됩니다.
-              </p>
-            )}
-            <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/90 p-4 text-sm shadow-sm backdrop-blur">
-              <p className="font-bold">출발지 설정</p>
-              <p className="mt-1 text-slate-600">
-                위치 권한을 허용하거나 주소를 입력하면 이동 정보를 확인할 수 있습니다.
-              </p>
-            </div>
-          </div>
+          <KakaoMap
+            results={results}
+            selectedLibraryId={selectedLibraryId}
+            onSelectLibrary={setSelectedLibraryId}
+          />
         </section>
       </div>
     </main>
