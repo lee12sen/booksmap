@@ -37,7 +37,7 @@ http://localhost:3000/api/libraries
 http://localhost:3000/api/books?keyword=어린%20왕자
 ```
 
-검색 결과의 `isbn13`을 사용해 부산 지역 소장 도서관과 대출 상태를 확인합니다. 도서 검색 응답은 `BookSearchResult`, 소장·대출 응답은 `LibraryBookResult` 모델을 사용합니다.
+검색 결과의 `isbn13`을 사용해 부산 지역 소장 도서관과 대출 상태를 확인합니다. 화면에는 우선 최대 5개 도서관만 표시합니다. 도서 검색 응답은 `BookSearchResult`, 소장·대출 응답은 `LibraryBookResult` 모델을 사용합니다.
 
 ```text
 http://localhost:3000/api/books?isbn13=9788949110479
